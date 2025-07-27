@@ -5,6 +5,8 @@ import { TYPES } from '../inversify/types';
 import type { IRegistryService } from '../services/IRegistryService';
 import type { ImageManifest } from '../types/docker';
 import { Breadcrumbs } from '../components/Breadcrumbs';
+import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
+import { useToasts } from '../context/ToastContext';
 
 function formatBytes(bytes: number, decimals = 2) {
   if (bytes === 0) return '0 Bytes';
@@ -18,6 +20,8 @@ function formatBytes(bytes: number, decimals = 2) {
 export default function ImageDetailsPage() {
   const { repositoryName, digest } = useParams<{ repositoryName: string; digest: string }>();
   const container = useContainer();
+  const { addToast } = useToasts();
+  const [copyStatus, copy] = useCopyToClipboard();
   const [manifest, setManifest] = useState<ImageManifest | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -66,9 +70,14 @@ export default function ImageDetailsPage() {
       />
       <div className="mt-4">
         <h2 className="text-2xl font-bold break-all">{repositoryName}</h2>
-        <p className="text-sm text-zinc-400 font-mono mt-1 break-all" title={digest}>
-          Digest: {digest}
-        </p>
+        <div className="flex items-center gap-2">
+          <p className="text-sm text-zinc-400 font-mono mt-1 break-all" title={digest}>
+            Digest: {digest}
+          </p>
+          <button onClick={() => { copy(digest!); addToast('Digest copied!', 'info'); }} title="Copy digest" className="mt-1 text-zinc-400 hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
       </div>
 
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">

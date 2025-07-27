@@ -7,6 +7,8 @@ import type { TagDetail } from '../types/docker';
 import { ConfirmationModal } from './ConfirmationModal';
 import { useSearch } from '../context/SearchContext';
 import { SkeletonLoader } from './SkeletonLoader';
+import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
+import { useToasts } from '../context/ToastContext';
 
 interface TagListProps {
   repositoryName: string;
@@ -40,6 +42,8 @@ function timeAgo(dateString: string) {
 export function TagList({ repositoryName }: TagListProps) {
   const container = useContainer();
   const { searchQuery } = useSearch();
+  const { addToast } = useToasts();
+  const [copyStatus, copy] = useCopyToClipboard();
   const [tags, setTags] = useState<Partial<TagDetail>[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -106,8 +110,11 @@ export function TagList({ repositoryName }: TagListProps) {
       const registryService = container.get<IRegistryService>(TYPES.RegistryService);
       await registryService.deleteManifest(repositoryName, tagToDelete.digest);
       setTags(currentTags => currentTags.filter(t => t.tag !== tagToDelete.tag));
+      addToast(`Tag ${tagToDelete.tag} deleted successfully.`, 'success');
     } catch (err) {
-      setError(`Failed to delete tag ${tagToDelete.tag}. Ensure the registry allows deletions.`);
+      const errorMessage = `Failed to delete tag ${tagToDelete.tag}. Ensure the registry allows deletions.`;
+      setError(errorMessage);
+      addToast(errorMessage, 'error');
       console.error(err);
     } finally {
       setTagToDelete(null);
@@ -148,13 +155,18 @@ export function TagList({ repositoryName }: TagListProps) {
                     <td className="p-3 font-mono">{tag.tag}</td>
                     <td className="p-3 font-mono text-zinc-400 truncate">
                       {tag.digest ? (
-                        <Link 
-                          to={`/repositories/${repositoryName}/manifests/${tag.digest}`}
-                          className="hover:text-white hover:underline"
-                          title={tag.digest}
-                        >
-                          {tag.digest.substring(0, 19)}...
-                        </Link>
+                        <div className="flex items-center gap-2">
+                          <Link 
+                            to={`/repositories/${repositoryName}/manifests/${tag.digest}`}
+                            className="hover:text-white hover:underline"
+                            title={tag.digest}
+                          >
+                            {tag.digest.substring(0, 19)}...
+                          </Link>
+                          <button onClick={() => { copy(tag.digest!); addToast('Digest copied!', 'info'); }} title="Copy digest">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                          </button>
+                        </div>
                       ) : <SkeletonLoader className="h-4 w-32" />}
                     </td>
                     <td className="p-3">
