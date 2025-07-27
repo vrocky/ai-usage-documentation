@@ -8,17 +8,19 @@ import { SearchProvider } from './context/SearchContext';
 import { ToastProvider } from './context/ToastContext';
 import { ToastContainer } from './components/ToastContainer';
 import { ThemeProvider } from './context/ThemeContext';
+import { Footer } from './components/Footer';
 
 function Layout() {
   return (
     <SearchProvider>
       <ToastProvider>
         <ThemeProvider>
-          <div className="min-h-screen bg-background text-foreground font-sans transition-colors duration-300">
+          <div className="min-h-screen flex flex-col bg-background text-foreground font-sans transition-colors duration-300">
             <Header />
-            <main className="container mx-auto p-4">
+            <main className="container mx-auto p-4 flex-grow">
               <Outlet />
             </main>
+            <Footer />
             <ToastContainer />
           </div>
         </ThemeProvider>

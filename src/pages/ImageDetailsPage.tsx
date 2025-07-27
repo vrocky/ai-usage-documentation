@@ -7,6 +7,9 @@ import type { ImageManifest } from '../types/docker';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
 import { useToasts } from '../context/ToastContext';
+import { Copy } from 'lucide-react';
+import { EmptyState } from '../components/EmptyState';
+import { SkeletonLoader } from '../components/SkeletonLoader';
 
 function formatBytes(bytes: number, decimals = 2) {
   if (bytes === 0) return '0 Bytes';
@@ -48,15 +51,28 @@ export default function ImageDetailsPage() {
   }, [container, repositoryName, digest]);
 
   if (loading) {
-    return <div className="text-center p-8">Loading image details...</div>;
+    return (
+      <div className="space-y-6">
+        <SkeletonLoader className="h-10 w-1/2" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-6">
+            <SkeletonLoader className="h-64 w-full" />
+            <SkeletonLoader className="h-48 w-full" />
+          </div>
+          <div className="lg:col-span-1">
+            <SkeletonLoader className="h-72 w-full" />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="text-center p-8 text-red-400">{error}</div>;
+    return <EmptyState title="Error" description={error} />;
   }
 
   if (!manifest || !repositoryName) {
-    return <div>Image details not found.</div>;
+    return <EmptyState title="Not Found" description="The requested image manifest could not be found." />;
   }
 
   return (
@@ -71,22 +87,22 @@ export default function ImageDetailsPage() {
       <div className="mt-4">
         <h2 className="text-2xl font-bold break-all">{repositoryName}</h2>
         <div className="flex items-center gap-2">
-          <p className="text-sm text-zinc-400 font-mono mt-1 break-all" title={digest}>
+          <p className="text-sm text-muted-foreground font-mono mt-1 break-all" title={digest}>
             Digest: {digest}
           </p>
-          <button onClick={() => { copy(digest!); addToast('Digest copied!', 'info'); }} title="Copy digest" className="mt-1 text-zinc-400 hover:text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <button onClick={() => { copy(digest!); addToast('Digest copied!', 'info'); }} title="Copy digest" className="mt-1 text-muted-foreground hover:text-foreground">
+            <Copy size={16} />
           </button>
         </div>
       </div>
 
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-zinc-800 rounded-lg shadow-md overflow-hidden">
-            <h3 className="text-lg font-semibold p-4 border-b border-zinc-700">Image Layers ({manifest.layers.length})</h3>
+          <div className="bg-card border border-border rounded-lg shadow-sm overflow-hidden">
+            <h3 className="text-lg font-semibold p-4 border-b border-border">Image Layers ({manifest.layers.length})</h3>
             <div className="overflow-x-auto">
               <table className="w-full text-left">
-                <thead className="bg-zinc-700 text-sm text-zinc-300">
+                <thead className="bg-muted text-sm text-muted-foreground">
                   <tr>
                     <th className="p-3 font-semibold">Digest</th>
                     <th className="p-3 font-semibold">Size</th>
@@ -94,8 +110,8 @@ export default function ImageDetailsPage() {
                 </thead>
                 <tbody>
                   {manifest.layers.map((layer, index) => (
-                    <tr key={index} className="border-b border-zinc-700 last:border-b-0">
-                      <td className="p-3 font-mono text-zinc-400 break-all">{layer.digest}</td>
+                    <tr key={index} className="border-b border-border last:border-b-0">
+                      <td className="p-3 font-mono text-muted-foreground break-all">{layer.digest}</td>
                       <td className="p-3">{formatBytes(layer.size)}</td>
                     </tr>
                   ))}
@@ -103,14 +119,14 @@ export default function ImageDetailsPage() {
               </table>
             </div>
           </div>
-          <div className="bg-zinc-800 rounded-lg shadow-md overflow-hidden">
-            <h3 className="text-lg font-semibold p-4 border-b border-zinc-700">History</h3>
+          <div className="bg-card border border-border rounded-lg shadow-sm overflow-hidden">
+            <h3 className="text-lg font-semibold p-4 border-b border-border">History</h3>
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <tbody>
                   {manifest.configBlob?.history.map((h, index) => (
-                    <tr key={index} className="border-b border-zinc-700 last:border-b-0">
-                      <td className="p-3 font-mono text-xs text-zinc-300 break-all whitespace-pre-wrap">{h.created_by}</td>
+                    <tr key={index} className="border-b border-border last:border-b-0">
+                      <td className="p-3 font-mono text-xs text-muted-foreground break-all whitespace-pre-wrap">{h.created_by}</td>
                     </tr>
                   )).reverse()}
                 </tbody>
@@ -120,25 +136,29 @@ export default function ImageDetailsPage() {
         </div>
 
         <div className="lg:col-span-1">
-          <div className="bg-zinc-800 rounded-lg shadow-md p-4">
+          <div className="bg-card border border-border rounded-lg shadow-sm p-4">
             <h3 className="text-lg font-semibold mb-3">Configuration</h3>
             <div className="space-y-3 text-sm">
               <div>
-                <h4 className="font-semibold text-zinc-400">Command</h4>
-                <pre className="bg-zinc-900 p-2 rounded-md mt-1 font-mono text-xs break-all">
+                <h4 className="font-semibold text-muted-foreground">Command</h4>
+                <pre className="bg-muted p-2 rounded-md mt-1 font-mono text-xs break-all whitespace-pre-wrap text-foreground">
                   {manifest.configBlob?.config.Cmd?.join(' ') || 'N/A'}
                 </pre>
               </div>
               <div>
-                <h4 className="font-semibold text-zinc-400">Working Directory</h4>
+                <h4 className="font-semibold text-muted-foreground">Working Directory</h4>
                 <p className="font-mono text-xs mt-1">{manifest.configBlob?.config.WorkingDir || 'N/A'}</p>
               </div>
               <div>
-                <h4 className="font-semibold text-zinc-400">Environment Variables</h4>
+                <h4 className="font-semibold text-muted-foreground">Environment Variables</h4>
                 <div className="space-y-1 mt-1">
-                  {manifest.configBlob?.config.Env?.map((env, i) => (
-                    <pre key={i} className="font-mono text-xs break-all">{env}</pre>
-                  )) || <p className="text-xs">None</p>}
+                  {manifest.configBlob?.config.Env?.length ? (
+                    manifest.configBlob.config.Env.map((env, i) => (
+                      <pre key={i} className="font-mono text-xs break-all">{env}</pre>
+                    ))
+                  ) : (
+                    <p className="text-xs text-muted-foreground">None</p>
+                  )}
                 </div>
               </div>
             </div>
