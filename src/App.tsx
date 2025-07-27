@@ -4,15 +4,18 @@ import { Header } from './components/Header';
 import RepositoryListPage from './pages/RepositoryListPage';
 import RepositoryDetailPage from './pages/RepositoryDetailPage';
 import ImageDetailsPage from './pages/ImageDetailsPage';
+import { SearchProvider } from './context/SearchContext';
 
 function Layout() {
   return (
-    <div className="min-h-screen bg-zinc-900 text-white font-sans">
-      <Header />
-      <main className="container mx-auto p-4">
-        <Outlet />
-      </main>
-    </div>
+    <SearchProvider>
+      <div className="min-h-screen bg-zinc-900 text-white font-sans">
+        <Header />
+        <main className="container mx-auto p-4">
+          <Outlet />
+        </main>
+      </div>
+    </SearchProvider>
   );
 }
 

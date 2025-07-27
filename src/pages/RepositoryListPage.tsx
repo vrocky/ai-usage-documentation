@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useContainer } from '../hooks/useContainer';
 import { TYPES } from '../inversify/types';
 import type { IRegistryService } from '../services/IRegistryService';
+import { useSearch } from '../context/SearchContext';
 
 // A simple box icon as a placeholder
 const BoxIcon = () => (
@@ -13,8 +14,10 @@ const BoxIcon = () => (
   </svg>
 );
 
+
 export default function RepositoryListPage() {
   const container = useContainer();
+  const { searchQuery } = useSearch();
   const [repos, setRepos] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,6 +41,10 @@ export default function RepositoryListPage() {
     fetchRepos();
   }, [container]);
 
+  const filteredRepos = useMemo(() => {
+    return repos.filter(repo => repo.toLowerCase().includes(searchQuery.toLowerCase()));
+  }, [repos, searchQuery]);
+
   if (loading) {
     return <div className="text-center p-8">Loading repositories...</div>;
   }
@@ -48,18 +55,24 @@ export default function RepositoryListPage() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Repositories</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {repos.map((repo) => (
-          <Link to={`/repositories/${repo}`} key={repo} className="flex items-start gap-4 p-4 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors shadow-md">
-            <BoxIcon />
-            <div className="flex-grow">
-              <h3 className="font-semibold text-lg break-all">{repo}</h3>
-              <p className="text-sm text-zinc-400">Docker Image Repository</p>
-            </div>
-          </Link>
-        ))}
-      </div>
+      <h2 className="text-2xl font-bold mb-4">Repositories ({filteredRepos.length})</h2>
+      {filteredRepos.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredRepos.map((repo) => (
+            <Link to={`/repositories/${repo}`} key={repo} className="flex items-start gap-4 p-4 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors shadow-md">
+              <BoxIcon />
+              <div className="flex-grow">
+                <h3 className="font-semibold text-lg break-all">{repo}</h3>
+                <p className="text-sm text-zinc-400">Docker Image Repository</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center p-8 text-zinc-400">
+          No repositories found.
+        </div>
+      )}
     </div>
   );
 }
