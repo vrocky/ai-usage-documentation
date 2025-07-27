@@ -1,11 +1,19 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export function Header() {
   return (
-    <header className="bg-zinc-800 border-b border-zinc-700">
+    <header className="bg-zinc-800 border-b border-zinc-700 sticky top-0 z-10">
       <div className="container mx-auto p-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold">Docker Registry UI</h1>
-        {/* Search bar can be added here later */}
+        <Link to="/" className="text-xl font-bold">Docker Registry UI</Link>
+        <div className="w-full max-w-xs">
+          <input
+            type="search"
+            placeholder="Search repositories..."
+            disabled
+            className="w-full px-3 py-1.5 bg-zinc-700 border border-zinc-600 rounded-md text-sm placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+          />
+        </div>
       </div>
     </header>
   );

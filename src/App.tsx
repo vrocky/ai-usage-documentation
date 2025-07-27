@@ -3,6 +3,7 @@ import { Routes, Route, Outlet } from 'react-router-dom';
 import { Header } from './components/Header';
 import RepositoryListPage from './pages/RepositoryListPage';
 import RepositoryDetailPage from './pages/RepositoryDetailPage';
+import ImageDetailsPage from './pages/ImageDetailsPage';
 
 function Layout() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<RepositoryListPage />} />
         <Route path="repositories/:repositoryName" element={<RepositoryDetailPage />} />
+        <Route path="repositories/:repositoryName/manifests/:digest" element={<ImageDetailsPage />} />
       </Route>
     </Routes>
   );

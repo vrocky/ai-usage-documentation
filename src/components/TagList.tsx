@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useContainer } from '../hooks/useContainer';
 import { TYPES } from '../inversify/types';
 import type { IRegistryService } from '../services/IRegistryService';
@@ -95,7 +96,15 @@ export function TagList({ repositoryName }: TagListProps) {
               {tags.map((tag) => (
                 <tr key={tag.tag} className="border-b border-zinc-700 last:border-b-0 hover:bg-zinc-700/50">
                   <td className="p-3 font-mono">{tag.tag}</td>
-                  <td className="p-3 font-mono text-zinc-400 truncate" title={tag.digest}>{tag.digest?.substring(0, 19)}...</td>
+                  <td className="p-3 font-mono text-zinc-400 truncate">
+                    <Link 
+                      to={`/repositories/${repositoryName}/manifests/${tag.digest}`}
+                      className="hover:text-white hover:underline"
+                      title={tag.digest}
+                    >
+                      {tag.digest?.substring(0, 19)}...
+                    </Link>
+                  </td>
                   <td className="p-3">{formatBytes(tag.totalSize ?? 0)}</td>
                   <td className="p-3">{tag.layers.length}</td>
                   <td className="p-3">

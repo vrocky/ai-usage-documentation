@@ -12,7 +12,7 @@ app.use(express.json());
 
 // Create proxy for Docker Registry
 const registryProxy = createProxyMiddleware({
-  target: 'http://localhost:5000', // Default Docker Registry URL
+  target: process.env.REGISTRY_URL || 'http://localhost:5000', // Use environment variable or default
   changeOrigin: true,
   pathRewrite: (path, req) => {
     // The proxy is mounted on /v2, so we don't need to rewrite the path itself,
@@ -48,5 +48,5 @@ app.get('/status', (req, res) => {
 const PORT = 3030;
 app.listen(PORT, () => {
   console.log(`Proxy server running on http://localhost:${PORT}`);
-  console.log(`Docker Registry API is proxied from /v2 to http://localhost:5000/v2`);
+  console.log(`Docker Registry API is proxied from /v2 to ${process.env.REGISTRY_URL || 'http://localhost:5000'}/v2`);
 });
