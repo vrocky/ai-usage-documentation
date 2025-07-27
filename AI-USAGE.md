@@ -1,7 +1,34 @@
 # AI-USAGE.md
 
 
+
 ## AI Usage Log
+
+### Observation 0
+
+- Initial experiment started.
+- GitHub Copilot usage at: 37%
+- Screenshots and prompt dump for this session are in the following directories:
+
+#### Directory Structure
+
+```
+./
+screenshots/
+    0/
+        ai-usage.png
+        ui-Screenshot-2025-07-28 014711.png
+prompts/
+    prompt-dump-0.md
+```
+
+**UI Screenshot (Browser View of Developed App):**
+![UI Screenshot](./screenshots/0/ui-Screenshot-2025-07-28%20014711.png)
+
+**GitHub Copilot Usage Percentage (Start):**
+![AI Usage](./screenshots/0/ai-usage.png)
+
+---
 
 ### Observation 1
 
@@ -10,8 +37,14 @@
 - Credits spent: 1%
 - GitHub Copilot usage started at: 37%
 
-#### Screenshots
+#### Directory Structure
 
+```
+./
+prompts/
+    prompt-dump-0.md
+    prompt-dump-1.md
+```
 
 **UI Screenshot (Browser View of Developed App):**
 ![UI Screenshot](./screenshots/ui-Screenshot-2025-07-28%20014711.png)
