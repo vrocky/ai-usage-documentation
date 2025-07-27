@@ -40,5 +40,10 @@
     "skipBaseClassChecks": true
   }
 }
+  },
+  "inversifyConfig": {
+    "skipBaseClassChecks": true
+  }
+}
 
 

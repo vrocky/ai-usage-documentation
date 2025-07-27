@@ -7,18 +7,21 @@ import ImageDetailsPage from './pages/ImageDetailsPage';
 import { SearchProvider } from './context/SearchContext';
 import { ToastProvider } from './context/ToastContext';
 import { ToastContainer } from './components/ToastContainer';
+import { ThemeProvider } from './context/ThemeContext';
 
 function Layout() {
   return (
     <SearchProvider>
       <ToastProvider>
-        <div className="min-h-screen bg-zinc-900 text-white font-sans">
-          <Header />
-          <main className="container mx-auto p-4">
-            <Outlet />
-          </main>
-          <ToastContainer />
-        </div>
+        <ThemeProvider>
+          <div className="min-h-screen bg-background text-foreground font-sans transition-colors duration-300">
+            <Header />
+            <main className="container mx-auto p-4">
+              <Outlet />
+            </main>
+            <ToastContainer />
+          </div>
+        </ThemeProvider>
       </ToastProvider>
     </SearchProvider>
   );

@@ -7,7 +7,7 @@ import { useSearch } from '../context/SearchContext';
 
 // A simple box icon as a placeholder
 const BoxIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-500">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
     <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
     <line x1="12" y1="22.08" x2="12" y2="12"></line>
@@ -59,17 +59,17 @@ export default function RepositoryListPage() {
       {filteredRepos.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredRepos.map((repo) => (
-            <Link to={`/repositories/${repo}`} key={repo} className="flex items-start gap-4 p-4 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors shadow-md">
+            <Link to={`/repositories/${repo}`} key={repo} className="flex items-start gap-4 p-4 bg-card border border-border rounded-lg hover:bg-accent hover:border-ring/50 transition-colors shadow-sm">
               <BoxIcon />
               <div className="flex-grow">
-                <h3 className="font-semibold text-lg break-all">{repo}</h3>
-                <p className="text-sm text-zinc-400">Docker Image Repository</p>
+                <h3 className="font-semibold text-lg break-all text-foreground">{repo}</h3>
+                <p className="text-sm text-muted-foreground">Docker Image Repository</p>
               </div>
             </Link>
           ))}
         </div>
       ) : (
-        <div className="text-center p-8 text-zinc-400">
+        <div className="text-center p-8 text-muted-foreground">
           No repositories found.
         </div>
       )}

@@ -17,3 +17,71 @@ This repository documents an AI-driven experiment where the task assigned to the
 ---
 
 _This project serves as a case study for AI-assisted software development._
+
+# Docker Registry UI
+
+A modern, user-friendly UI for browsing and managing images in a Docker V2 Registry. This project is built with React, TypeScript, Vite, and Tailwind CSS, taking inspiration from Docker Hub for a clean and intuitive user experience.
+
+## Features
+
+- **Repository Browsing:** View all repositories in your registry.
+- **Tag Management:** List, view details for, and delete image tags.
+- **Image Details:** Inspect image layers, configuration, and history.
+- **Pagination:** Efficiently browse repositories with many tags.
+- **Search:** Client-side search for repositories and tags.
+- **Dark/Light Mode:** Switch between themes for your viewing preference.
+- **Responsive Design:** Usable on both desktop and mobile devices.
+
+## Setup and Installation
+
+### Prerequisites
+
+- Node.js (v18 or newer)
+- A running Docker V2 Registry instance.
+  - For deletion to work, the registry must be started with `REGISTRY_STORAGE_DELETE_ENABLED=true`.
+
+### Running the Application
+
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository-url>
+    cd docker-registry-v2-ui
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Configure the Registry Proxy:**
+    The application uses a Node.js proxy server to communicate with the Docker Registry. By default, it assumes your registry is at `http://localhost:5000`.
+
+    If your registry is at a different URL, create a `.env` file in the project root and set the `REGISTRY_URL` variable:
+    ```
+    # .env
+    REGISTRY_URL=http://your-registry-host:port
+    ```
+
+4.  **Start the proxy server and the UI:**
+    This project uses two parallel processes. It's recommended to run them in separate terminal windows.
+
+    -   **Terminal 1: Start the proxy server:**
+        ```bash
+        npm run proxy
+        ```
+
+    -   **Terminal 2: Start the Vite development server:**
+        ```bash
+        npm run dev
+        ```
+
+5.  **Open the application:**
+    Navigate to `http://localhost:5173` (or the port specified by Vite) in your browser.
+
+## Available Scripts
+
+- `npm run dev`: Starts the Vite development server for the UI.
+- `npm run build`: Builds the application for production.
+- `npm run lint`: Lints the source code.
+- `npm run preview`: Serves the production build locally.
+- `npm run proxy`: Starts the Node.js proxy server.

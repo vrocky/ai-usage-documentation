@@ -135,12 +135,12 @@ export function TagList({ repositoryName }: TagListProps) {
 
   return (
     <>
-      <div className="bg-zinc-800 rounded-lg shadow-md overflow-hidden">
-        <h3 className="text-lg font-semibold p-4 border-b border-zinc-700">Tags ({filteredTags.length})</h3>
+      <div className="bg-card border border-border rounded-lg shadow-sm overflow-hidden">
+        <h3 className="text-lg font-semibold p-4 border-b border-border">Tags ({filteredTags.length})</h3>
         <div className="overflow-x-auto">
           {filteredTags.length > 0 ? (
             <table className="w-full text-left">
-              <thead className="bg-zinc-700 text-sm text-zinc-300">
+              <thead className="bg-muted text-muted-foreground text-sm">
                 <tr>
                   <th className="p-3 font-semibold">Tag</th>
                   <th className="p-3 font-semibold">Digest</th>
@@ -151,19 +151,19 @@ export function TagList({ repositoryName }: TagListProps) {
               </thead>
               <tbody>
                 {filteredTags.map((tag) => (
-                  <tr key={tag.tag} className="border-b border-zinc-700 last:border-b-0 hover:bg-zinc-700/50">
+                  <tr key={tag.tag} className="border-b border-border last:border-b-0 hover:bg-accent">
                     <td className="p-3 font-mono">{tag.tag}</td>
-                    <td className="p-3 font-mono text-zinc-400 truncate">
+                    <td className="p-3 font-mono text-muted-foreground truncate">
                       {tag.digest ? (
                         <div className="flex items-center gap-2">
                           <Link 
                             to={`/repositories/${repositoryName}/manifests/${tag.digest}`}
-                            className="hover:text-white hover:underline"
+                            className="hover:text-foreground hover:underline"
                             title={tag.digest}
                           >
                             {tag.digest.substring(0, 19)}...
                           </Link>
-                          <button onClick={() => { copy(tag.digest!); addToast('Digest copied!', 'info'); }} title="Copy digest">
+                          <button onClick={() => { copy(tag.digest!); addToast('Digest copied!', 'info'); }} title="Copy digest" className="text-muted-foreground hover:text-foreground">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                           </button>
                         </div>
@@ -172,13 +172,13 @@ export function TagList({ repositoryName }: TagListProps) {
                     <td className="p-3">
                       {tag.totalSize !== undefined ? formatBytes(tag.totalSize) : <SkeletonLoader className="h-4 w-16" />}
                     </td>
-                    <td className="p-3 text-zinc-400" title={tag.configBlob?.created ? new Date(tag.configBlob.created).toLocaleString() : ''}>
+                    <td className="p-3 text-muted-foreground" title={tag.configBlob?.created ? new Date(tag.configBlob.created).toLocaleString() : ''}>
                       {tag.configBlob?.created ? timeAgo(tag.configBlob.created) : <SkeletonLoader className="h-4 w-24" />}
                     </td>
                     <td className="p-3">
                       <button
                         onClick={() => setTagToDelete(tag)}
-                        className="text-red-400 hover:text-red-300 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="text-destructive hover:text-destructive/80 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={!tag.digest}
                         title={!tag.digest ? "Cannot delete tag without a digest" : "Delete tag"}
                       >
@@ -190,15 +190,15 @@ export function TagList({ repositoryName }: TagListProps) {
               </tbody>
             </table>
           ) : (
-            <div className="p-8 text-center text-zinc-400">No tags found matching your search.</div>
+            <div className="p-8 text-center text-muted-foreground">No tags found matching your search.</div>
           )}
         </div>
         {nextPageUrl && (
-          <div className="p-4 border-t border-zinc-700 text-center">
+          <div className="p-4 border-t border-border text-center">
             <button
               onClick={() => fetchTags(nextPageUrl)}
               disabled={loadingMore}
-              className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-500 transition-colors font-semibold disabled:bg-blue-800 disabled:cursor-wait"
+              className="px-4 py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-semibold disabled:opacity-50 disabled:cursor-wait"
             >
               {loadingMore ? 'Loading...' : 'Load More'}
             </button>
