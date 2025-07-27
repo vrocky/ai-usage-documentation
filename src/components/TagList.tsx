@@ -10,6 +10,7 @@ import { SkeletonLoader } from './SkeletonLoader';
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
 import { useToasts } from '../context/ToastContext';
 import { Copy, Trash2 } from 'lucide-react';
+import { EmptyState } from './EmptyState';
 
 interface TagListProps {
   repositoryName: string;
@@ -131,7 +132,7 @@ export function TagList({ repositoryName }: TagListProps) {
   }
 
   if (error) {
-    return <div className="text-center p-8 text-red-400">{error}</div>;
+    return <EmptyState title="Error" description={error} />;
   }
 
   return (
