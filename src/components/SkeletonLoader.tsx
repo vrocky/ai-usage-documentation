@@ -6,6 +6,6 @@ interface SkeletonLoaderProps {
 
 export function SkeletonLoader({ className }: SkeletonLoaderProps) {
   return (
-    <div className={`animate-pulse bg-zinc-700 rounded ${className}`} />
+    <div className={`animate-pulse bg-muted rounded ${className}`} />
   );
 }

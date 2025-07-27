@@ -153,7 +153,7 @@ export function TagList({ repositoryName }: TagListProps) {
               <tbody>
                 {filteredTags.map((tag) => (
                   <tr key={tag.tag} className="border-b border-border last:border-b-0 hover:bg-accent">
-                    <td className="p-3 font-mono">{tag.tag}</td>
+                    <td className="p-3 font-mono" title={`docker pull ${repositoryName}:${tag.tag}`}>{tag.tag}</td>
                     <td className="p-3 font-mono text-muted-foreground truncate">
                       {tag.digest ? (
                         <div className="flex items-center gap-2">
@@ -191,7 +191,10 @@ export function TagList({ repositoryName }: TagListProps) {
               </tbody>
             </table>
           ) : (
-            <div className="p-8 text-center text-muted-foreground">No tags found matching your search.</div>
+            <div className="p-8 text-center text-muted-foreground">
+              <p className="font-semibold">No tags found</p>
+              <p className="text-sm">{searchQuery ? "Try adjusting your search." : "This repository has no tags."}</p>
+            </div>
           )}
         </div>
         {nextPageUrl && (
@@ -212,8 +215,8 @@ export function TagList({ repositoryName }: TagListProps) {
         onConfirm={handleDeleteConfirm}
         title="Delete Tag"
       >
-        <p>Are you sure you want to delete the tag <strong>{tagToDelete?.tag}</strong>?</p>
-        <p className="text-sm text-zinc-400 mt-2">This will delete the manifest associated with the tag. This action might be irreversible.</p>
+        <p>Are you sure you want to delete the tag <strong className="text-foreground">{tagToDelete?.tag}</strong>?</p>
+        <p className="text-sm text-muted-foreground mt-2">This will delete the manifest associated with the tag. This action might be irreversible.</p>
       </ConfirmationModal>
     </>
   );

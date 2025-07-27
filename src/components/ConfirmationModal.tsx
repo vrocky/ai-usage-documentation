@@ -14,7 +14,7 @@ export function ConfirmationModal({ isOpen, onClose, onConfirm, title, children 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
       <div className="bg-card rounded-lg shadow-xl p-6 w-full max-w-md border border-border">
-        <h2 className="text-xl font-bold mb-4">{title}</h2>
+        <h2 className="text-xl font-bold mb-4 text-foreground">{title}</h2>
         <div className="text-muted-foreground mb-6">{children}</div>
         <div className="flex justify-end gap-4">
           <button

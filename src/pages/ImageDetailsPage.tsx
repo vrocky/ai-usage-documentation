@@ -7,7 +7,7 @@ import type { ImageManifest } from '../types/docker';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
 import { useToasts } from '../context/ToastContext';
-import { Copy } from 'lucide-react';
+import { Copy, Layers, History } from 'lucide-react';
 import { EmptyState } from '../components/EmptyState';
 import { SkeletonLoader } from '../components/SkeletonLoader';
 
@@ -56,11 +56,11 @@ export default function ImageDetailsPage() {
         <SkeletonLoader className="h-10 w-1/2" />
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <SkeletonLoader className="h-64 w-full" />
-            <SkeletonLoader className="h-48 w-full" />
+            <SkeletonLoader className="h-64 w-full rounded-lg" />
+            <SkeletonLoader className="h-48 w-full rounded-lg" />
           </div>
           <div className="lg:col-span-1">
-            <SkeletonLoader className="h-72 w-full" />
+            <SkeletonLoader className="h-72 w-full rounded-lg" />
           </div>
         </div>
       </div>
@@ -81,7 +81,7 @@ export default function ImageDetailsPage() {
         items={[
           { label: 'Repositories', path: '/' },
           { label: repositoryName, path: `/repositories/${repositoryName}` },
-          { label: 'manifest' },
+          { label: 'Manifest Details' },
         ]}
       />
       <div className="mt-4">
@@ -99,7 +99,10 @@ export default function ImageDetailsPage() {
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-card border border-border rounded-lg shadow-sm overflow-hidden">
-            <h3 className="text-lg font-semibold p-4 border-b border-border">Image Layers ({manifest.layers.length})</h3>
+            <h3 className="text-lg font-semibold p-4 flex items-center gap-2 border-b border-border">
+              <Layers size={20} className="text-primary" />
+              <span>Image Layers ({manifest.layers.length})</span>
+            </h3>
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead className="bg-muted text-sm text-muted-foreground">
@@ -110,7 +113,7 @@ export default function ImageDetailsPage() {
                 </thead>
                 <tbody>
                   {manifest.layers.map((layer, index) => (
-                    <tr key={index} className="border-b border-border last:border-b-0">
+                    <tr key={index} className="border-b border-border last:border-b-0 hover:bg-accent">
                       <td className="p-3 font-mono text-muted-foreground break-all">{layer.digest}</td>
                       <td className="p-3">{formatBytes(layer.size)}</td>
                     </tr>
@@ -120,12 +123,15 @@ export default function ImageDetailsPage() {
             </div>
           </div>
           <div className="bg-card border border-border rounded-lg shadow-sm overflow-hidden">
-            <h3 className="text-lg font-semibold p-4 border-b border-border">History</h3>
+            <h3 className="text-lg font-semibold p-4 flex items-center gap-2 border-b border-border">
+              <History size={20} className="text-primary" />
+              <span>History</span>
+            </h3>
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <tbody>
                   {manifest.configBlob?.history.map((h, index) => (
-                    <tr key={index} className="border-b border-border last:border-b-0">
+                    <tr key={index} className="border-b border-border last:border-b-0 hover:bg-accent">
                       <td className="p-3 font-mono text-xs text-muted-foreground break-all whitespace-pre-wrap">{h.created_by}</td>
                     </tr>
                   )).reverse()}
@@ -139,6 +145,14 @@ export default function ImageDetailsPage() {
           <div className="bg-card border border-border rounded-lg shadow-sm p-4">
             <h3 className="text-lg font-semibold mb-3">Configuration</h3>
             <div className="space-y-3 text-sm">
+              <div>
+                <h4 className="font-semibold text-muted-foreground">OS / Arch</h4>
+                <p className="font-mono text-xs mt-1">{manifest.configBlob?.os || 'N/A'} / {manifest.configBlob?.architecture || 'N/A'}</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-muted-foreground">Author</h4>
+                <p className="font-mono text-xs mt-1">{manifest.configBlob?.author || 'N/A'}</p>
+              </div>
               <div>
                 <h4 className="font-semibold text-muted-foreground">Command</h4>
                 <pre className="bg-muted p-2 rounded-md mt-1 font-mono text-xs break-all whitespace-pre-wrap text-foreground">
