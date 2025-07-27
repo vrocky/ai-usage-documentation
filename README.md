@@ -1,57 +1,19 @@
-# Hello World React Boilerplate
+# AI Experiment: docker-registry-v2-ui
 
+This repository documents an AI-driven experiment where the task assigned to the AI was to build a Docker Registry v2 UI using React, TypeScript, and Vite.
 
-This is a minimal React + TypeScript + Vite project, with SCSS and Tailwind CSS support.
+## About the Experiment
 
+- **Objective:** Evaluate the effectiveness and workflow of using advanced AI (Gemini 2.5 Pro and GitHub Copilot) to develop a real-world web application from scratch.
+- **Task:** The AI was instructed to create a user interface for Docker Registry v2, including proxy setup, Docker integration, and UI features.
+- **Process:** All major steps, code, and configuration were generated or guided by the AI, with minimal manual intervention.
 
-## Features
-- React 19 + TypeScript
-- Vite for fast development
-- SCSS support (see `src/index.scss`)
-- Tailwind CSS utility classes available
-- Minimal styling (centered Hello World)
+## Results & Documentation
 
+- For detailed setup, usage, and technical documentation, please check the internal docs and the project blog.
+- Blog: [https://medium.com/@vinitsiriya](https://medium.com/@vinitsiriya)
+- See [AI-USAGE.md](./AI-USAGE.md) for stats, screenshots, and a summary of the AI's involvement.
 
-## Getting Started
+---
 
-1. **Install dependencies:**
-   ```sh
-   npm install
-   ```
-2. **Start the development server:**
-   ```sh
-   npm run dev
-   ```
-3. Open [http://localhost:5173](http://localhost:5173) in your browser.
-
-## Styling
-
-- You can use both SCSS and Tailwind utility classes in your components.
-- Global styles are in `src/index.scss`.
-- Tailwind is configured via `tailwind.config.js` and loaded in `index.scss`.
-
-Example usage in a component:
-
-```tsx
-<div className="bg-gray-900 text-white p-4 rounded shadow">
-  Hello Tailwind!
-</div>
-```
-
-Or add custom SCSS in `index.scss` or import your own SCSS files.
-
-## Project Structure
-
-- `src/App.tsx` — Main React component (Hello World)
-- `src/index.scss` — Minimal global styles
-- `vite.config.ts` — Vite configuration
-
-## Build for Production
-
-```
-npm run build
-```
-
-## License
-
-MIT
+_This project serves as a case study for AI-assisted software development._
