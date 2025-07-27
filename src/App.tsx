@@ -1,13 +1,16 @@
-import { useState, useEffect, useMemo } from 'react';
 import React from 'react';
+import { Header } from './components/Header';
+import { RepositoryList } from './components/RepositoryList';
 
 function App() {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#18181b', color: '#fff', fontFamily: 'Inter, sans-serif' }}>
-      <h1 style={{ fontSize: '2.5rem', fontWeight: 700 }}>Hello, World!</h1>
+    <div className="min-h-screen bg-zinc-900 text-white font-sans">
+      <Header />
+      <main className="container mx-auto p-4">
+        <RepositoryList />
+      </main>
     </div>
   );
 }
 
 export default App;
-            

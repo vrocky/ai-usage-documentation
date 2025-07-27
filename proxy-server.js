@@ -10,24 +10,23 @@ app.use(cors());
 // Parse JSON bodies
 app.use(express.json());
 
-// Create proxy for Gremlin server
-const gremlinProxy = createProxyMiddleware({
-  target: 'http://localhost:8182', // Default target (will be overridden by request)
+// Create proxy for Docker Registry
+const registryProxy = createProxyMiddleware({
+  target: 'http://localhost:5000', // Default Docker Registry URL
   changeOrigin: true,
-  pathRewrite: {
-    '^/proxy': '', // Remove /proxy prefix when forwarding
+  pathRewrite: (path, req) => {
+    // The proxy is mounted on /v2, so we don't need to rewrite the path itself,
+    // but we can log it.
+    console.log(`Proxying path: ${path}`);
+    return path;
   },
-  // Handle proxy configuration through query parameters
-  router: (req) => {
-    const target = req.query.target || 'http://localhost:8182';
-    console.log(`Proxying request to: ${target}`);
-    return target;
-  },
-  // Log when proxy receives a request
+  // You can set the target dynamically if needed, e.g., from an environment variable
+  // router: (req) => {
+  //   return process.env.REGISTRY_URL || 'http://localhost:5000';
+  // },
   onProxyReq: (proxyReq, req, res) => {
-    console.log(`Proxying ${req.method} ${req.url}`);
+    console.log(`Proxying ${req.method} ${req.originalUrl} to ${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`);
   },
-  // Handle errors
   onError: (err, req, res) => {
     console.error('Proxy error:', err);
     res.writeHead(500, {
@@ -37,8 +36,8 @@ const gremlinProxy = createProxyMiddleware({
   }
 });
 
-// Apply proxy middleware to /proxy path
-app.use('/proxy', gremlinProxy);
+// Apply proxy middleware to /v2 path for the Docker Registry API
+app.use('/v2', registryProxy);
 
 // Status endpoint to check if the proxy is running
 app.get('/status', (req, res) => {
@@ -49,5 +48,5 @@ app.get('/status', (req, res) => {
 const PORT = 3030;
 app.listen(PORT, () => {
   console.log(`Proxy server running on http://localhost:${PORT}`);
-  console.log(`Use /proxy?target=http://your-gremlin-server:port to access your Gremlin server`);
+  console.log(`Docker Registry API is proxied from /v2 to http://localhost:5000/v2`);
 });

@@ -6,6 +6,8 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -18,7 +20,7 @@
     /* Linting */
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "strict": false
+    "strict": true
   },
   "include": ["src"]
 }
